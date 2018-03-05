@@ -1,0 +1,17 @@
+<section class="new-training" fxLayout fxLayoutAlign="center">
+    <mat-card fxFlex="400px" fxFlex.xs=100%>
+        <mat-card-title fxLayoutAlign="center">Time to start swimming</mat-card-title>
+        <mat-card-content fxLayoutAlign="center">
+            <mat-form-field>
+                <mat-select placeholder="Select swimming">
+                  <mat-option *ngFor="let swim of swims" [value]="swim.value">
+                    {{ swim.viewValue }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+        </mat-card-content>
+        <mat-card-actions fxLayoutAlign="center">
+          <button mat-button (click)="onStartTraining()" type="submit">Start</button>
+        </mat-card-actions>
+    </mat-card>      
+</section>
