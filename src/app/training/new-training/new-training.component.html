@@ -5,7 +5,7 @@
             <mat-card-content fxLayoutAlign="center">
                 <mat-form-field>
                     <mat-select placeholder="Select swimming" ngModel name="exercise" required>
-                        <mat-option *ngFor="let swim of swims | async" [value]="swim.name">
+                        <mat-option *ngFor="let swim of swims" [value]="swim.id">
                             {{ swim.name }}
                         </mat-option>
                     </mat-select>
