@@ -6,6 +6,7 @@ import { Router } from '@angular/router';
 import { AngularFireAuth } from 'angularfire2/auth';
 import { TrainingService } from '../training/training.service';
 import { MatSnackBar } from '@angular/material';
+import { UIService } from '../shared/ui.service';
 
 @Injectable()
 export class AuthService {
@@ -17,7 +18,8 @@ export class AuthService {
         private router: Router, 
         private afa: AngularFireAuth, 
         private trainingService: TrainingService, 
-        private snackbar: MatSnackBar
+        private snackbar: MatSnackBar,
+        private ui: UIService
         ) {}
 
     initAuthListener() {
@@ -36,14 +38,17 @@ export class AuthService {
     }
 
     registerUser(authData: AuthData) {
+        this.ui.loadingStateChanged.next(true);
         this.afa.auth.createUserWithEmailAndPassword(authData.email, authData.password)
             .then(result => {
-                console.log(result);
+                this.ui.loadingStateChanged.next(false);
             })
             .catch(error => {
-                this.snackbar.open(error.message, null,  {
-                    duration: 3000
-                });
+                this.ui.loadingStateChanged.next(false);
+                this.ui.openSnackBar(error.message, null, 3000);
+                // this.snackbar.open(error.message, null,  {
+                //     duration: 3000
+                // });
             });
         // this.user = {
         //     email: authData.email,
@@ -53,14 +58,17 @@ export class AuthService {
 
     }
     login(authData: AuthData) {
+        this.ui.loadingStateChanged.next(true);
         this.afa.auth.signInWithEmailAndPassword(authData.email, authData.password)
             .then(result => {
-                console.log(result);
+                this.ui.loadingStateChanged.next(false);
             })
             .catch(error => {
-                this.snackbar.open(error.message, null, {
-                    duration: 3000
-                });
+                this.ui.loadingStateChanged.next(false);
+                this.ui.openSnackBar(error.message, null, 3000);
+                // this.snackbar.open(error.message, null, {
+                //     duration: 3000
+                // });
             });
         // this.user = {
         //     email: authData.email,
