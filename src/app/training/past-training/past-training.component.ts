@@ -34,6 +34,8 @@ export class PastTrainingComponent implements OnInit, AfterViewInit {
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
   ngOnDestroy() {
-    this.exerciseSubscription.unsubscribe();
+    if( this.exerciseSubscription) {
+      this.exerciseSubscription.unsubscribe();
+    }
   }
 }

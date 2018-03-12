@@ -7,6 +7,8 @@ import { AngularFireAuth } from 'angularfire2/auth';
 import { TrainingService } from '../training/training.service';
 import { MatSnackBar } from '@angular/material';
 import { UIService } from '../shared/ui.service';
+import { Store } from '@ngrx/store';
+import * as fromApp from '../app.reducer';
 
 @Injectable()
 export class AuthService {
@@ -19,7 +21,8 @@ export class AuthService {
         private afa: AngularFireAuth, 
         private trainingService: TrainingService, 
         private snackbar: MatSnackBar,
-        private ui: UIService
+        private uis: UIService,
+        private store: Store<{ui: fromApp.State}>
         ) {}
 
     initAuthListener() {
@@ -38,14 +41,17 @@ export class AuthService {
     }
 
     registerUser(authData: AuthData) {
-        this.ui.loadingStateChanged.next(true);
+        // this.uis.loadingStateChanged.next(true);
+        this.store.dispatch({type: 'START_LOADING'});
         this.afa.auth.createUserWithEmailAndPassword(authData.email, authData.password)
             .then(result => {
-                this.ui.loadingStateChanged.next(false);
+                // this.uis.loadingStateChanged.next(false);
+                this.store.dispatch({type: 'STOP_LOADING'});
             })
             .catch(error => {
-                this.ui.loadingStateChanged.next(false);
-                this.ui.openSnackBar(error.message, null, 3000);
+                // this.uis.loadingStateChanged.next(false);
+                this.store.dispatch({type: 'STOP_LOADING'});
+                this.uis.openSnackBar(error.message, null, 3000);
                 // this.snackbar.open(error.message, null,  {
                 //     duration: 3000
                 // });
@@ -58,14 +64,17 @@ export class AuthService {
 
     }
     login(authData: AuthData) {
-        this.ui.loadingStateChanged.next(true);
+        // this.uis.loadingStateChanged.next(true);
+        this.store.dispatch({type: 'START_LOADING'});
         this.afa.auth.signInWithEmailAndPassword(authData.email, authData.password)
             .then(result => {
-                this.ui.loadingStateChanged.next(false);
+                // this.uis.loadingStateChanged.next(false);
+                this.store.dispatch({type: 'STOP_LOADING'});
             })
             .catch(error => {
-                this.ui.loadingStateChanged.next(false);
-                this.ui.openSnackBar(error.message, null, 3000);
+                // this.uis.loadingStateChanged.next(false);
+                this.store.dispatch({type: 'STOP_LOADING'});
+                this.uis.openSnackBar(error.message, null, 3000);
                 // this.snackbar.open(error.message, null, {
                 //     duration: 3000
                 // });
